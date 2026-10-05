@@ -1,0 +1,16 @@
+{
+  "model_id": "sleep-detection",
+  "event_type": "sleep_event",
+  "event_id": "sleep-example-001",
+  "model_version": "v1.0.0",
+  "status": "SUCCESS",
+  "processing_time_ms": 12345,
+  "output_media": {
+    "annotated_video_s3_key": "jobs/sleep-example-001/sleep-detection/annotated.mp4",
+    "annotated_image_s3_keys": [
+      "jobs/sleep-example-001/sleep-detection/frame_1.jpg"
+    ]
+  },
+  "detections": [],
+  "error": null
+}

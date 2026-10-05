@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phone-usage-detection
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: phone-usage-detection
+  template:
+    metadata:
+      labels:
+        app: phone-usage-detection
+    spec:
+      serviceAccountName: phone-usage-detection-sa
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: gpu-nodes-2xlarge
+      containers:
+        - name: phone-usage-detection
+          image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/phone-usage-detection@sha256:3d0ad472bfb98d1e9d9051a64999c50a7597659ae42015e352e4c7ad7a7bd5c3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: FOOTAGE_BUCKET
+              value: "icu-solarcam-storage-bacancy-ap-southeast-2"
+            - name: STORAGE_BACKEND
+              value: "s3"
+            - name: AWS_REGION
+              value: "ap-southeast-2"
+            - name: DEVICE
+              value: "cuda:0"
+            - name: MODEL_ID
+              value: "phone-usage-detection"
+            - name: MODEL_VERSION
+              value: "v1.0.6"
+            - name: MODEL_PATH
+              value: "/app/weights/best.pt"
+            - name: CONFIDENCE_THRESHOLD
+              value: "0.25"
+            - name: IMAGE_SIZE
+              value: "1280"
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3

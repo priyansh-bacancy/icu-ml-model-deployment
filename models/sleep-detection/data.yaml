@@ -1,0 +1,8 @@
+path: D:\ICU\ICU-video-analytics\production_dataset_final_v2
+train: images/train
+val: images/val
+test: images/test
+nc: 2
+names:
+  0: SLEEPING
+  1: AWAKE

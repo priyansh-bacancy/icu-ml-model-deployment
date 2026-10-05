@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sleep-detection
+  namespace: default
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: sleep-detection
+  template:
+    metadata:
+      labels:
+        app: sleep-detection
+    spec:
+      serviceAccountName: sleep-detection-sa
+      nodeSelector:
+        eks.amazonaws.com/nodegroup: gpu-nodes-2xlarge
+      containers:
+        - name: sleep-detection
+          image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/sleep-detection@sha256:bc7ec36383c4cac071fc3c0b3b3cf918417facdd090c108371c88508ef2f15d1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: FOOTAGE_BUCKET
+              value: "icu-solarcam-storage-bacancy-ap-southeast-2"
+            - name: STORAGE_BACKEND
+              value: "s3"
+            - name: AWS_REGION
+              value: "ap-southeast-2"
+            - name: DEVICE
+              value: "cuda:0"
+            - name: MODEL_ID
+              value: "sleep-detection"
+            - name: MODEL_VERSION
+              value: "v1.0.6"
+            - name: MODEL_PATH
+              value: "/app/weights/best.pt"
+            - name: CONFIDENCE_THRESHOLD
+              value: "0.70"
+            - name: IMAGE_SIZE
+              value: "640"
+            - name: TARGET_LABEL
+              value: "SLEEPING"
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            periodSeconds: 30
+            timeoutSeconds: 3
+            failureThreshold: 3

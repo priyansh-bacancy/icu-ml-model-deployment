@@ -1,0 +1,8 @@
+path: D:/ICU/ICU-video-analytics/phone_dataset_v4
+train: images/train
+val: images/val
+test: images/test
+nc: 2
+names:
+  0: in_hand
+  1: on_ear

@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - service-account-phone-usage-detection.yaml
+  - deployment-phone-usage-detection.yaml
+  - service-phone-usage-detection.yaml
+  - service-account-sleep-detection.yaml
+  - deployment-sleep-detection.yaml
+  - service-sleep-detection.yaml
+  - service-account-videomae-aggression.yaml
+  - deployment-videomae-aggression.yaml
+  - service-videomae-aggression.yaml
