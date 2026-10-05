@@ -1,0 +1,62 @@
+FROM pytorch/pytorch:2.10.0-cuda12.8-cudnn9-runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    MODEL_PATH=/app/weights/best_model.pt \
+    DEVICE=cuda:0 \
+    NVIDIA_VISIBLE_DEVICES=all \
+    NVIDIA_DRIVER_CAPABILITIES=compute,utility \
+    PATH=/opt/venv/bin:$PATH \
+    PORT=8080
+
+WORKDIR /app
+
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --no-install-recommends \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+        curl \
+        ffmpeg \
+        libglib2.0-0 \
+        libgomp1 \
+        libcurl4 \
+        openssl \
+        python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN /usr/bin/python3 -m pip install --no-cache-dir --break-system-packages --upgrade \
+        msgpack==1.2.1 \
+        pillow==12.3.0 \
+        setuptools==84.0.0 \
+        urllib3==2.7.0 \
+        wheel==0.48.0
+
+RUN python -m venv --system-site-packages /opt/venv
+
+COPY requirements.txt .
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip install --no-cache-dir -r requirements.txt \
+    && python -c "import torch, torchvision; assert torch.__version__.startswith('2.10.'); assert torch.version.cuda == '12.8'; print(torch.__version__, torchvision.__version__, torch.version.cuda)"
+
+RUN /usr/bin/python3 -m pip uninstall --break-system-packages -y pip \
+    && /opt/venv/bin/python -m pip uninstall -y pip
+
+COPY config.py storage.py modeling.py builder.py processor.py snapshots.py job.py predict.py inference.py entrypoint.py ./
+COPY weights/ weights/
+COPY best_videoMAE.pt weights/best_model.pt
+COPY scripts/smoke_test.py scripts/contract_smoke_test.py scripts/model_smoke_test.py scripts/
+
+RUN useradd --create-home --uid 10001 model-server \
+    && mkdir -p /storage /app/weights \
+    && chown -R model-server:model-server /storage /app
+
+USER model-server
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=180s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/ping', timeout=3)"
+
+ENTRYPOINT ["python", "/app/entrypoint.py"]
+CMD ["serve"]

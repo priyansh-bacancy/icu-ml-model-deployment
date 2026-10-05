@@ -1,0 +1,16 @@
+.git
+.gitignore
+.pytest_cache
+__pycache__
+*.py[cod]
+*.log
+*.mp4
+.venv
+venv
+local-storage
+tests
+README.md
+scripts/*
+!scripts/smoke_test.py
+!scripts/contract_smoke_test.py
+data.yaml

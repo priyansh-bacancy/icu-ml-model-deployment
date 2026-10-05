@@ -1,0 +1,16 @@
+{
+  "model_id": "videomae-aggression",
+  "event_type": "aggression_event",
+  "event_id": "aggression-example-001",
+  "model_version": "v1",
+  "status": "SUCCESS",
+  "processing_time_ms": 12345,
+  "output_media": {
+    "annotated_video_s3_key": "jobs/aggression-example-001/videomae-aggression/annotated.mp4",
+    "annotated_image_s3_keys": [
+      "jobs/aggression-example-001/videomae-aggression/frame_1.jpg"
+    ]
+  },
+  "detections": [],
+  "error": null
+}

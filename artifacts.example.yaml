@@ -1,0 +1,22 @@
+# Copy this file outside Git or into an approved secret/configuration store and
+# replace the placeholders with the current recovery locations and checksums.
+# Never add AWS credentials to this file.
+
+models:
+  phone-usage:
+    checkpoint_filename: best.pt
+    s3_uri: s3://<model-artifact-bucket>/<versioned-key>
+    sha256: <checkpoint-sha256>
+    deployed_image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/phone-usage-detection@sha256:3d0ad472bfb98d1e9d9051a64999c50a7597659ae42015e352e4c7ad7a7bd5c3
+
+  sleep-detection:
+    checkpoint_filename: best-sleep.pt
+    s3_uri: s3://<model-artifact-bucket>/<versioned-key>
+    sha256: <checkpoint-sha256>
+    deployed_image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/sleep-detection@sha256:bc7ec36383c4cac071fc3c0b3b3cf918417facdd090c108371c88508ef2f15d1
+
+  aggression-detection:
+    checkpoint_filename: best_videoMAE.pt
+    s3_uri: s3://<model-artifact-bucket>/<versioned-key>
+    sha256: <checkpoint-sha256>
+    deployed_image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/videomae-aggression@sha256:952d46e7c6b93cfdb87a3d6676dc36d0c0fab23d10db9b5d01234ac46cc83b52

@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manager
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - name: manager
+          image: 126378326989.dkr.ecr.ap-southeast-2.amazonaws.com/icu-solarcam/manager@sha256:92b3519e8342242c5a79fbfe16b4004b934b00258575cb1f1af49fb3a6adf2fb

@@ -1,0 +1,14 @@
+fastapi==0.141.1
+starlette==1.6.0
+uvicorn==0.52.3
+boto3==1.43.73
+ultralytics==8.4.63
+opencv-python-headless==4.12.0.88
+pillow==12.3.0
+urllib3==2.7.0
+jaraco.context==6.1.2
+brotli==1.2.0
+soupsieve==2.9.2
+msgpack==1.2.1
+setuptools==84.0.0
+wheel==0.48.0

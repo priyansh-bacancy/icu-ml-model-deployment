@@ -1,0 +1,44 @@
+FROM python:3.11-slim
+
+ARG TORCH_VERSION=2.7.1
+ARG TORCHVISION_VERSION=0.22.1
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app \
+    MODEL_PATH=/app/weights/best_model.pt \
+    PORT=8080
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        ffmpeg \
+        libglib2.0-0 \
+        libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && python -m pip install --no-cache-dir \
+        "torch==${TORCH_VERSION}" "torchvision==${TORCHVISION_VERSION}" \
+        --index-url https://download.pytorch.org/whl/cpu \
+    && python -m pip install --no-cache-dir -r requirements.txt
+
+COPY config.py storage.py modeling.py builder.py processor.py snapshots.py job.py predict.py inference.py entrypoint.py ./
+COPY weights/ weights/
+COPY best_videoMAE.pt weights/best_model.pt
+COPY scripts/smoke_test.py scripts/contract_smoke_test.py scripts/model_smoke_test.py scripts/
+
+RUN useradd --create-home --uid 10001 model-server \
+    && mkdir -p /storage /app/weights \
+    && chown -R model-server:model-server /storage /app
+
+USER model-server
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=180s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/ping', timeout=3)"
+
+ENTRYPOINT ["python", "/app/entrypoint.py"]
+CMD ["serve"]

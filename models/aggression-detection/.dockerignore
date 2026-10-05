@@ -1,0 +1,10 @@
+__pycache__/
+.pytest_cache/
+local-s3/
+test-output/
+*.avi
+*.ipynb
+*.zip
+*.tar
+*.tar.gz
+tests/
