@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials*
+
+# Model artifacts and datasets
+*.pt
+*.pth
+*.onnx
+*.engine
+*.tar
+*.tar.gz
+*.zip
+datasets/
+weights/
+!weights/README.md
+
+# Media and generated outputs
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.jpg
+*.jpeg
+*.png
+local-s3/
+local-storage/
+test-output/
+output/
+outputs/
+tmp/
+
+# Tool and OS files
+.aws-deploy/
+.codex-*/
+.DS_Store
+Thumbs.db
+*.log
+
