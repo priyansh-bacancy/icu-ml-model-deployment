@@ -1,0 +1,16 @@
+# Reconstructed build recipe; see docs/RECOVERED_MODEL_HANDOFF.md.
+ARG BASE_IMAGE=icu-solarcam/pytorch-gpu:recovery-v1
+FROM ${BASE_IMAGE}
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 PYTHONPATH=/app YOLO_CONFIG_DIR=/tmp PORT=8080
+WORKDIR /app
+COPY requirements.txt ./
+RUN uv pip install --system --no-cache -r requirements.txt
+COPY *.py ./
+COPY weights/vehicle_detector.pt /app/weights/vehicle_detector.pt
+COPY weights/color_best.pt /app/weights/color_best.pt
+COPY weights/make_model_best.pt /app/weights/make_model_best.pt
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15m --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/ping', timeout=3)"
+ENTRYPOINT ["python", "/app/entrypoint.py"]
+CMD ["serve"]

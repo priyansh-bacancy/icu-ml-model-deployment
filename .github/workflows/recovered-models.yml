@@ -1,0 +1,20 @@
+name: Recovered model verification
+on:
+  pull_request:
+  push:
+    branches:
+      - feature/add-model-deployment-packages
+permissions:
+  contents: read
+jobs:
+  offline-verification:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: '3.12'
+      - run: uv sync --locked
+      - run: uv run --locked pytest -q
+      - run: uv run --locked ruff check models/fall-detection models/restricted-zone models/mmc-vehicle-classification tests
+      - run: uv run --locked ruff format --check models/fall-detection models/restricted-zone models/mmc-vehicle-classification tests

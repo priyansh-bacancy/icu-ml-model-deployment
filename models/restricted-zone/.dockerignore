@@ -1,0 +1,6 @@
+**
+!*.py
+!requirements.txt
+!Dockerfile.gpu
+!weights/
+!weights/best.pt

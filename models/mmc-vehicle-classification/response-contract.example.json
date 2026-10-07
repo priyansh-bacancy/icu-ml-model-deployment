@@ -1,0 +1,40 @@
+{
+  "model_id": "mmc-vehicle-classification",
+  "event_type": "vehicle_event",
+  "event_id": "demo-mmc-vehicle-classification",
+  "model_version": "v8",
+  "status": "SUCCESS",
+  "processing_time_ms": 1000,
+  "output_media": {
+    "annotated_video_s3_key": "jobs/demo-mmc-vehicle-classification/mmc-vehicle-classification/annotated.mp4",
+    "annotated_image_s3_keys": [
+      "jobs/demo-mmc-vehicle-classification/mmc-vehicle-classification/frame_1.jpg"
+    ]
+  },
+  "detections": [
+    {
+      "detection_id": "d-0001",
+      "label": "car",
+      "count": 1,
+      "best_frame_number": 0,
+      "first_seen_ms": 0,
+      "last_seen_ms": 0,
+      "instances": [
+        {
+          "confidence": 0.9,
+          "bbox": {
+            "x": 10,
+            "y": 20,
+            "w": 100,
+            "h": 150
+          },
+          "attributes": {
+            "frame_number": 0,
+            "timestamp_ms": 0
+          }
+        }
+      ]
+    }
+  ],
+  "error": null
+}

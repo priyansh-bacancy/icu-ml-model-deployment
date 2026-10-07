@@ -1,0 +1,29 @@
+{
+  "orig_w": 640,
+  "orig_h": 480,
+  "zones": [
+    {
+      "id": "demo-camera:rule-1",
+      "type": "restricted",
+      "applies_to": "both",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          639,
+          0
+        ],
+        [
+          639,
+          479
+        ],
+        [
+          0,
+          479
+        ]
+      ]
+    }
+  ]
+}
