@@ -1,0 +1,6 @@
+boto3==1.43.55
+faiss-cpu==1.10.0
+numpy==1.26.4
+open-clip-torch==2.32.0
+Pillow==12.3.0
+ultralytics==8.4.102

@@ -1,0 +1,5 @@
+{
+  "job_id": "demo-restricted-zone",
+  "footage_s3_key": "uploads/demo.mp4",
+  "zones_s3_key": "uploads/demo-zones.json"
+}

@@ -1,7 +1,7 @@
 # ICU ML Model Deployment
 
-Deployment-ready source code for the ICU video analytics models maintained by
-Priyansh. The repository keeps the runtime, tests, container definitions and EKS
+Deployment source code for the ICU video analytics models maintained by
+Priyansh and Varuni. The repository keeps the runtime, tests, container definitions and EKS
 manifests required to modify or redeploy the services without depending on one
 developer machine.
 
@@ -12,10 +12,20 @@ developer machine.
 | Phone usage | `models/phone-usage/` | `phone-usage-detection` |
 | Sleep detection | `models/sleep-detection/` | `sleep-detection` |
 | Aggression detection | `models/aggression-detection/` | `videomae-aggression` |
+| Fall detection | `models/fall-detection/` | `fall-detection` |
+| Restricted zone | `models/restricted-zone/` | `restricted-zone` |
+| MMC vehicle classification | `models/mmc-vehicle-classification/` | `mmc-vehicle-classification` |
 
 Shared EKS resources and the manager routing patch are under
 `deploy/eks-sydney/`. The validated deployment state is documented in
 `docs/EKS_DEPLOYMENT_HANDOFF.md`.
+
+The recovered Fall, Restricted Zone and MMC packages have independent, sanitized
+zero-replica templates under `deploy/eks-recovered/`. See
+`docs/RECOVERED_MODEL_HANDOFF.md` for their provenance, external checkpoints,
+FAISS requirements, current response contract, storage layout and limitations.
+Their regression checks use `uv sync --locked` followed by `uv run pytest`.
+The existing models and their deployment resources remain unchanged.
 
 ## Repository policy
 

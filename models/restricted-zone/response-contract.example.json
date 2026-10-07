@@ -1,0 +1,51 @@
+{
+  "model_id": "restricted-zone",
+  "event_type": "restricted_zone_event",
+  "event_id": "demo-restricted-zone",
+  "model_version": "v7",
+  "status": "SUCCESS",
+  "processing_time_ms": 1000,
+  "output_media": {
+    "annotated_video_s3_key": "jobs/demo-restricted-zone/restricted-zone/annotated.mp4",
+    "annotated_image_s3_keys": [
+      "jobs/demo-restricted-zone/restricted-zone/frame_1.jpg"
+    ]
+  },
+  "detections": [
+    {
+      "detection_id": "d-0001",
+      "label": "vehicle",
+      "count": 1,
+      "best_frame_number": 0,
+      "first_seen_ms": 0,
+      "last_seen_ms": 0,
+      "instances": [
+        {
+          "confidence": 0.9,
+          "bbox": {
+            "x": 10,
+            "y": 20,
+            "w": 100,
+            "h": 150
+          },
+          "attributes": {
+            "frame_number": 0,
+            "timestamp_ms": 0,
+            "has_zone_violation": true,
+            "zone_observations": [
+              {
+                "zone_id": "demo-camera:rule-1",
+                "zone_type": "restricted",
+                "applies_to": "both",
+                "inside": true,
+                "violated": true,
+                "rule": "presence_not_allowed"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "error": null
+}

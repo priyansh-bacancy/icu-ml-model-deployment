@@ -1,0 +1,8 @@
+**
+!*.py
+!requirements.txt
+!Dockerfile.gpu
+!weights/
+!weights/vehicle_detector.pt
+!weights/color_best.pt
+!weights/make_model_best.pt

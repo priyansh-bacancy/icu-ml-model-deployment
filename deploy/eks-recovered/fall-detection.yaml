@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fall-detection-sa
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::000000000000:role/REPLACE_WITH_APPROVED_ROLE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fall-detection
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: fall-detection
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fall-detection
+  namespace: default
+spec:
+  replicas: 0
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: fall-detection
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: fall-detection
+    spec:
+      serviceAccountName: fall-detection-sa
+      tolerations:
+        - key: nvidia.com/gpu
+          operator: Exists
+          effect: NoSchedule
+      containers:
+        - name: inference
+          image: example.invalid/icu-solarcam/fall-detection@sha256:2c2f1098ced527530b97b675682574e5545a3e3db73a858500aa5b95a1f8420c
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          env:
+            - name: AWS_DEFAULT_REGION
+              value: ap-southeast-2
+            - name: FOOTAGE_BUCKET
+              value: REPLACE_WITH_BUCKET
+            - name: OUTPUT_BUCKET
+              value: REPLACE_WITH_BUCKET
+            - name: YOLO_CONFIG_DIR
+              value: /tmp
+          resources:
+            requests:
+              cpu: "1"
+              memory: 2Gi
+              ephemeral-storage: 6Gi
+              nvidia.com/gpu: 1
+            limits:
+              cpu: "3"
+              memory: 6Gi
+              ephemeral-storage: "20Gi"
+              nvidia.com/gpu: 1
+          startupProbe:
+            httpGet:
+              path: /ping
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 90
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5

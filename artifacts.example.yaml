@@ -3,6 +3,29 @@
 # Never add AWS credentials to this file.
 
 models:
+  fall-detection:
+    checkpoint_filenames: [weights/best.pt]
+    s3_uri: s3://<model-artifact-bucket>/models/fall-detection/<versioned-artifact>
+    sha256: <checkpoint-sha256>
+    version: v7
+
+  restricted-zone:
+    checkpoint_filenames: [weights/best.pt]
+    s3_uri: s3://<model-artifact-bucket>/models/restricted-zone/<versioned-artifact>
+    sha256: <checkpoint-sha256>
+    version: v7
+
+  mmc-vehicle-classification:
+    checkpoint_filenames:
+      - weights/vehicle_detector.pt
+      - weights/color_best.pt
+      - weights/make_model_best.pt
+    s3_uri: s3://<model-artifact-bucket>/models/mmc-vehicle-classification/<versioned-artifact>
+    sha256: <one-checksum-per-checkpoint>
+    faiss_s3_prefix: s3://<model-artifact-bucket>/models/mmc-vehicle-classification/faiss_db/v1/
+    faiss_required_pairs: [color_index, make_model_registry]
+    version: v8
+
   phone-usage:
     checkpoint_filename: best.pt
     s3_uri: s3://<model-artifact-bucket>/<versioned-key>

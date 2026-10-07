@@ -49,4 +49,18 @@ tmp/
 .DS_Store
 Thumbs.db
 *.log
+*.faiss
+*.npy
+*.npz
+*.webm
+*.gif
+*.bmp
+*.csv
+vector_db/
+faiss_db/
+checkpoint-backup/
+recovery-staging/
+private-overlay/
+*.local.yaml
+*.local.json
 
